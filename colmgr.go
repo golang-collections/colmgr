@@ -45,9 +45,9 @@ type Cursor interface {}
 
 // SCAFFOLDING OPERATORS:///////////////////////////////////////////////////////
 type MkNoder interface {
-	MkNode(uintptr)
+	MkNode(uintptr, []byte)
 }
-func MkNode(handle interface{}, key uintptr) {
+func MkNode(handle interface{}, key uintptr, val []byte) {
 	p := uintptr(reflect.ValueOf(handle).Pointer())
-	collections[p].MkNode(key)
+	collections[p].MkNode(key, val)
 }
