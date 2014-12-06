@@ -1,7 +1,7 @@
 package colmgr
 
 import (
-	"fmt"
+//	"fmt"
 	"reflect"
 )
 
@@ -50,15 +50,22 @@ type Ender interface {
 	End() bool
 }
 
+type UpdMapper interface {
+	Map() []byte
+	Upd([]byte)
+}
+
 const Collection = 0
 const Begin = uintptr(0)
 const End = ^Begin
 
 type Nexter interface {
+	UpdMapper
 	Ender
 	Next()
 }
 type Atter interface {
+	UpdMapper
 	Ender
 	Next() Nexter
 }
