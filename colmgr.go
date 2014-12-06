@@ -33,16 +33,42 @@ type Rooter interface {
 }
 
 type Collector interface {
-	Spawner	// Cursor operator - upcoming
+	Atterer	// Cursor operator - upcoming
+	Nearerer
 	MkNoder	// SCAFFOLDING OPERATOR
 }
 
 // Cursor operators:... upcoming////////////////////////////////////////////////
-type Spawner interface {
-	Spawn() Cursor
+type Ender interface {
+	End() bool
 }
-type Cursor interface {}
 
+type Nexter interface {
+	Ender
+	Next()
+}
+type Atter interface {
+	Ender
+	Next() Nexter
+}
+type Nearer interface {
+	Ender
+	Next() Nexter
+}
+type Atterer interface {
+	At(uintptr) Atter
+}
+type Nearerer interface {
+	Near(uintptr) Nearer
+}
+func At(handle interface{}, key uintptr) Atter {
+	p := uintptr(reflect.ValueOf(handle).Pointer())
+	return collections[p].At(key)
+}
+func Near(handle interface{}, key uintptr) Nearer {
+	p := uintptr(reflect.ValueOf(handle).Pointer())
+	return collections[p].Near(key)
+}
 // SCAFFOLDING OPERATORS:///////////////////////////////////////////////////////
 type MkNoder interface {
 	MkNode(uintptr, []byte)
