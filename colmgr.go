@@ -43,8 +43,9 @@ type Ender interface {
 	End() bool
 }
 
-const Start = uintptr(0)
-const End = ^Start
+const Collection = 0
+const Begin = uintptr(0)
+const End = ^Begin
 
 type Nexter interface {
 	Ender
