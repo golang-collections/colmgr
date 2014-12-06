@@ -23,6 +23,8 @@ func Init(handle interface{}, rooter Rooter) {
 
 func Destroy(handle interface{}) {
 	p := uintptr(reflect.ValueOf(handle).Pointer())
+
+	collections[p].Destroy()
 	delete(collections, p)
 
 	fmt.Printf("Destroyed %d.\n", p)
