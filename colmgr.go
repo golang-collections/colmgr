@@ -16,7 +16,7 @@ func init() {
 func Init(handle interface{}, rooter Rooter) {
 	p := uintptr(reflect.ValueOf(handle).Pointer())
 
-	fmt.Printf("Calling Root to %d.\n", p)
+//	fmt.Printf("Calling Root to %d.\n", p)
 
 	collections[p] = rooter.Root()
 }
@@ -27,7 +27,7 @@ func Destroy(handle interface{}) {
 	collections[p].Destroy()
 	delete(collections, p)
 
-	fmt.Printf("Destroyed %d.\n", p)
+//	fmt.Printf("Destroyed %d.\n", p)
 	// FIXME: refcounting?
 }
 
@@ -80,6 +80,9 @@ func MkNode(handle interface{}, key uintptr, val []byte) {
 	if key == End {
 		panic("Key -1 is end. Use smaller")
 	}
+
+//	print("MKNODE()\n")
+
 	p := uintptr(reflect.ValueOf(handle).Pointer())
 	collections[p].MkNode(key, val)
 }
