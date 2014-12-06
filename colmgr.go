@@ -37,8 +37,12 @@ type Collector interface {
 	Atterer // Cursor operator - upcoming
 	MkNoder // SCAFFOLDING OPERATOR
 	Dumper	// dumps the collection to a stdout
+	Destroyer // this should trigger a collection destruction
 }
 
+type Destroyer interface {
+	Destroy()
+}
 // Cursor operators:... upcoming////////////////////////////////////////////////
 type Ender interface {
 	End() bool
