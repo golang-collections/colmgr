@@ -36,6 +36,7 @@ type Rooter interface {
 type Collector interface {
 	Atterer // Cursor operator - upcoming
 	MkNoder // SCAFFOLDING OPERATOR
+	Dumper	// dumps the collection to a stdout
 }
 
 // Cursor operators:... upcoming////////////////////////////////////////////////
@@ -75,4 +76,16 @@ func MkNode(handle interface{}, key uintptr, val []byte) {
 	}
 	p := uintptr(reflect.ValueOf(handle).Pointer())
 	collections[p].MkNode(key, val)
+}
+
+type Dumper interface {
+	Dump(byte)
+}
+
+func Dump(handle interface{}, format byte) {
+	if format > 0 {
+		panic("Unsupported format")
+	}
+	p := uintptr(reflect.ValueOf(handle).Pointer())
+	collections[p].Dump(format)
 }
