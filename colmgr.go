@@ -2,6 +2,7 @@ package colmgr
 
 import (
 //	"fmt"
+	"github.com/anlhord/generic"
 	"reflect"
 )
 
@@ -51,8 +52,8 @@ type Ender interface {
 }
 
 type UpdMapper interface {
-	Map() []byte
-	Upd([]byte)
+	Map() generic.Value
+	Upd(generic.Value)
 }
 
 const Begin = uintptr(0)
@@ -68,6 +69,8 @@ type Atter interface {
 	UpdMapper
 	Ender
 	Next() Nexter
+	At(uintptr) Atter
+	MkNode(key uintptr, val generic.Value)
 }
 type Atterer interface {
 	At(uintptr) Atter
@@ -80,10 +83,10 @@ func At(handle interface{}, key uintptr) Atter {
 
 // SCAFFOLDING OPERATORS:/DO NOT USE IN PRODUCTION FOR TESTING PURPOSE ONLY/////
 type MkNoder interface {
-	MkNode(uintptr, []byte)
+	MkNode(uintptr, generic.Value)
 }
 
-func MkNode(handle interface{}, key uintptr, val []byte) {
+func MkNode(handle interface{}, key uintptr, val generic.Value) {
 	if key >= End {
 		panic("Key -1 is end. Use smaller")
 	}
