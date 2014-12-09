@@ -55,7 +55,6 @@ type UpdMapper interface {
 	Upd([]byte)
 }
 
-const Collection = 0
 const Begin = uintptr(0)
 const Root = ^Begin
 const End = ^uintptr(1)
