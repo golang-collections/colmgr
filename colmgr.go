@@ -57,7 +57,8 @@ type UpdMapper interface {
 
 const Collection = 0
 const Begin = uintptr(0)
-const End = ^Begin
+const Root = ^Begin
+const End = ^uintptr(1)
 
 type Nexter interface {
 	UpdMapper
@@ -84,7 +85,7 @@ type MkNoder interface {
 }
 
 func MkNode(handle interface{}, key uintptr, val []byte) {
-	if key == End {
+	if key >= End {
 		panic("Key -1 is end. Use smaller")
 	}
 
