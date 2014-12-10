@@ -72,6 +72,7 @@ type Atter interface {
 	Nexterer
 	MkNoder
 	Appender
+	Fixer
 }
 type Atterer interface {
 	At(uintptr) Atter
@@ -88,6 +89,10 @@ func At(handle interface{}, key uintptr) Atter {
 
 type Appender interface {
 	Append(generic.Value)
+}
+
+type Fixer interface {
+	Fix()
 }
 
 // SCAFFOLDING OPERATORS:/DO NOT USE IN PRODUCTION FOR TESTING PURPOSE ONLY/////
