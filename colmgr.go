@@ -61,24 +61,33 @@ const Root = ^Begin
 const End = ^uintptr(1)
 
 type Nexter interface {
-	UpdMapper
+	Atterer
 	Ender
 	Next()
 }
 type Atter interface {
+	Atterer
 	UpdMapper
 	Ender
-	Next() Nexter
-	At(uintptr) Atter
-	MkNode(key uintptr, val generic.Value)
+	Nexterer
+	MkNoder
+	Appender
 }
 type Atterer interface {
 	At(uintptr) Atter
 }
 
+type Nexterer interface {
+	Next() Nexter
+}
+
 func At(handle interface{}, key uintptr) Atter {
 	p := uintptr(reflect.ValueOf(handle).Pointer())
 	return collections[p].At(key)
+}
+
+type Appender interface {
+	Append(generic.Value)
 }
 
 // SCAFFOLDING OPERATORS:/DO NOT USE IN PRODUCTION FOR TESTING PURPOSE ONLY/////
