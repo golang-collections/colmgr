@@ -56,6 +56,7 @@ type UpdMapper interface {
 	Upd(generic.Value)
 }
 
+type Pad uint16
 const Begin = uintptr(0)
 const Root = ^Begin
 const End = ^uintptr(1)
