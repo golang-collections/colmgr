@@ -1,7 +1,7 @@
 package colmgr
 
 import (
-//	"fmt"
+	"github.com/anlhord/generic/low"
 	"github.com/anlhord/generic"
 	"reflect"
 )
@@ -32,6 +32,50 @@ func Destroy(handle interface{}) {
 	// FIXME: refcounting?
 }
 
+func Puts(slice interface{}, u UpdMapper) {
+	if colmgr_debug && !low.S(slice) {
+		panic("Put slice is not a slice")
+	}
+	u.Upd(*low.T(slice))
+}
+
+func Gets(slice interface{}, u UpdMapper) {
+	if colmgr_debug && !low.S(slice) {
+		panic("Get slice is not a slice")
+	}
+	*low.T(slice) = u.Map()
+}
+
+func Puti(iface interface{}, u UpdMapper) {
+	if colmgr_debug && low.S(iface) {
+		panic("Get iface is not an iface")
+	}
+	u.Upd(low.Y(iface))
+}
+
+func Geti(iface interface{}, u UpdMapper) {
+	if colmgr_debug && low.S(iface) {
+		panic("Get iface is not an iface")
+	}
+	*low.I(iface) = u.Map()
+}
+
+func Put(gvalue interface{}, u UpdMapper) {
+	if low.S(gvalue) {
+		Puts(gvalue, u)
+	} else {
+		Puti(gvalue, u)
+	}
+}
+
+func Get(gvalue interface{}, u UpdMapper) {
+	if low.S(gvalue) {
+		Gets(gvalue, u)
+	} else {
+		Geti(gvalue, u)
+	}
+}
+
 type Rooter interface {
 	Root() Collector
 }
@@ -52,8 +96,8 @@ type Ender interface {
 }
 
 type UpdMapper interface {
-	Map() generic.Value
-	Upd(generic.Value)
+	Map() *generic.Value
+	Upd(*generic.Value)
 }
 
 type Pad uint16
