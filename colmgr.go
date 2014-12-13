@@ -32,6 +32,8 @@ func Destroy(handle interface{}) {
 	// FIXME: refcounting?
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
 func Puts(slice interface{}, u UpdMapper) {
 	if colmgr_debug && !low.S(slice) {
 		panic("Put slice is not a slice")
@@ -76,6 +78,26 @@ func Get(gvalue interface{}, u UpdMapper) {
 	}
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
+func Append(gvalue interface{}, p Pusher) {
+	if low.S(gvalue) {
+		Appends(gvalue, p)
+	} else {
+		Appendi(gvalue, p)
+	}
+}
+
+func Appendi(iface interface{}, p Pusher) {
+	p.Push(low.Y(iface))
+}
+
+func Appends(slice interface{}, p Pusher) {
+	p.Push(*low.T(slice))
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 type Rooter interface {
 	Root() Collector
 }
@@ -100,7 +122,6 @@ type UpdMapper interface {
 	Upd(*generic.Value)
 }
 
-type Pad uint16
 const Begin = uintptr(0)
 const Root = ^Begin
 const End = ^uintptr(1)
@@ -116,7 +137,7 @@ type Atter interface {
 	Ender
 	Nexterer
 	MkNoder
-	Appender
+	Pusher
 	Fixer
 }
 type Atterer interface {
@@ -132,8 +153,8 @@ func At(handle interface{}, key uintptr) Atter {
 	return collections[p].At(key)
 }
 
-type Appender interface {
-	Append(generic.Value)
+type Pusher interface {
+	Push(*generic.Value)
 }
 
 type Fixer interface {
