@@ -1,8 +1,8 @@
 package colmgr
 
 import (
-	"github.com/anlhord/generic/low"
 	"github.com/anlhord/generic"
+	"github.com/anlhord/generic/low"
 	"reflect"
 )
 
@@ -17,7 +17,11 @@ func init() {
 func Init(handle interface{}, rooter Rooter) {
 	p := uintptr(reflect.ValueOf(handle).Pointer())
 
-//	fmt.Printf("Calling Root to %d.\n", p)
+	//	fmt.Printf("Calling Root to %d.\n", p)
+
+	if colmgr_debug && collections[p] != nil {
+		panic("Reinitialized collection")
+	}
 
 	collections[p] = rooter.Root()
 }
@@ -28,7 +32,7 @@ func Destroy(handle interface{}) {
 	collections[p].Destroy()
 	delete(collections, p)
 
-//	fmt.Printf("Destroyed %d.\n", p)
+	//	fmt.Printf("Destroyed %d.\n", p)
 	// FIXME: refcounting?
 }
 
@@ -103,16 +107,17 @@ type Rooter interface {
 }
 
 type Collector interface {
-	Atterer // Cursor operator - upcoming
-	MkNoder // SCAFFOLDING OPERATOR
-	Dumper	// dumps the collection to a stdout
-	Destroyer // this should trigger a collection destruction
+	Atterer
+	MkNoder
+	Dumper
+	Destroyer
 }
 
 type Destroyer interface {
 	Destroy()
 }
-// Cursor operators:... upcoming////////////////////////////////////////////////
+
+// Cursor operators:////////////////////////////////////////////////
 type Ender interface {
 	End() bool
 }
@@ -161,7 +166,6 @@ type Fixer interface {
 	Fix()
 }
 
-// SCAFFOLDING OPERATORS:/DO NOT USE IN PRODUCTION FOR TESTING PURPOSE ONLY/////
 type MkNoder interface {
 	MkNode(uintptr, generic.Value)
 }
@@ -170,8 +174,6 @@ func MkNode(handle interface{}, key uintptr, val generic.Value) {
 	if key >= End {
 		panic("Key -1 is end. Use smaller")
 	}
-
-//	print("MKNODE()\n")
 
 	p := uintptr(reflect.ValueOf(handle).Pointer())
 	collections[p].MkNode(key, val)
