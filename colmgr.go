@@ -3,7 +3,9 @@ package colmgr
 import (
 	"github.com/anlhord/generic"
 	"github.com/anlhord/generic/low"
+	genref "github.com/anlhord/generic/reflect"
 	"reflect"
+//	"fmt"
 )
 
 // this is the map that stores the roots of the collections
@@ -85,7 +87,29 @@ func Get(gvalue interface{}, u UpdMapper) {
 ////////////////////////////////////////////////////////////////////////////////
 
 func Inserts(gkey uintptr, slice interface{}, u MkNoder) {
-	u.MkNode(gkey, *low.T(slice))
+	if colmgr_debug && !low.S(slice) {
+		panic("Insert slice is not a slice")
+	}
+
+	sll := genref.Stuff(slice)	// FIXME: use low.T here
+
+	if colmgr_gen_debug {	// FIXME: make low.T work
+
+		sl := *low.T(slice)
+
+		if &(sll[0]) != &((*sl)[0]) {
+			panic("low.T bug")
+		}
+		if len(sll) != len((*sl)) {
+			panic("low.T len bug")
+		}
+		if cap(sll) != cap((*sl)) {
+			panic("low.T cap bug")
+		}
+	}
+
+//	fmt.Printf("Inserts %v.\n", &((sll)[0]))
+	u.MkNode(gkey, &sll)
 }
 
 func Inserti(gkey uintptr, iface interface{}, u MkNoder) {
