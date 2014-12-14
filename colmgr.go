@@ -84,6 +84,24 @@ func Get(gvalue interface{}, u UpdMapper) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+func Inserts(gkey uintptr, slice interface{}, u MkNoder) {
+	u.MkNode(gkey, *low.T(slice))
+}
+
+func Inserti(gkey uintptr, iface interface{}, u MkNoder) {
+	u.MkNode(gkey, low.Y(iface))
+}
+
+func Insert(gkey uintptr, gvalue interface{}, u MkNoder) {
+	if low.S(gvalue) {
+		Inserts(gkey, gvalue, u)
+	} else {
+		Inserti(gkey, gvalue, u)
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 func Append(gvalue interface{}, p Pusher) {
 	if low.S(gvalue) {
 		Appends(gvalue, p)
@@ -167,10 +185,11 @@ type Fixer interface {
 }
 
 type MkNoder interface {
-	MkNode(uintptr, generic.Value)
+	MkNode(uintptr, *generic.Value)
 }
-
-func MkNode(handle interface{}, key uintptr, val generic.Value) {
+/*
+// scaffolding operation
+func Insert(handle interface{}, key uintptr, val *generic.Value) {
 	if key >= End {
 		panic("Key -1 is end. Use smaller")
 	}
@@ -178,7 +197,7 @@ func MkNode(handle interface{}, key uintptr, val generic.Value) {
 	p := uintptr(reflect.ValueOf(handle).Pointer())
 	collections[p].MkNode(key, val)
 }
-
+*/
 type Dumper interface {
 	Dump(byte)
 }
