@@ -227,7 +227,7 @@ type Dumper interface {
 }
 
 func Dump(handle interface{}, format byte) {
-	if format > 0 {
+	if format > 1 {
 		panic("Unsupported format")
 	}
 	p := uintptr(reflect.ValueOf(handle).Pointer())
