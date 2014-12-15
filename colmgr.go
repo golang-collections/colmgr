@@ -181,6 +181,7 @@ type Nexter interface {
 type Atter interface {
 	Atterer
 	UpdMapper
+	Nuker
 	Ender
 	Nexterer
 	MkNoder
@@ -208,11 +209,15 @@ type Fixer interface {
 	Fix()
 }
 
+type Nuker interface {
+	Nuke(uintptr, uintptr)
+}
+
 type MkNoder interface {
 	MkNode(uintptr, *generic.Value)
 }
 /*
-// scaffolding operation
+// scaffolding operation, a high level replacement for a MkNode
 func Insert(handle interface{}, key uintptr, val *generic.Value) {
 	if key >= End {
 		panic("Key -1 is end. Use smaller")
